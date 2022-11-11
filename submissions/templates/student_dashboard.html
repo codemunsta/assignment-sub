@@ -1,0 +1,133 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <style>
+          .rectangle {
+            border: 1px solid orange;
+            border-radius: 1rem;
+          }
+          .box_image {
+            margin: 2rem;
+            border: 1px solid orange;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-sizing: border-box;
+          }
+          .long {
+            width: 50%;
+            padding: 0.5rem;
+          }
+          .hrr {
+            margin: 3rem;
+          }
+          .courses{
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+          }
+          .ass {
+            margin-top: 2rem;
+            margin-bottom:2rem;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-sizing: border-box;
+            background-color: #EBECF0;
+          }
+      </style>
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-expand-lg bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand text-warning" href="{% url 'home' %}">ASSIGNMENTIFY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                </li>
+              </ul>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_superuser %}
+                        <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'create_faculty' %}">Create Faculty</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'create_department' %}">Create Department</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'create_semester' %}">Create Semester</a>
+                  </li>
+              </ul>
+                    {% else %}
+                        <ul class="navbar-nav">
+                              <li class="nav-item">
+                                <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link btn btn-outline-danger mx-2" aria-current="page" href="{% url 'logout' %}">Logout</a>
+                              </li>
+                          </ul>
+                    {% endif %}
+                {% else %}
+                    <ul class="navbar-nav">
+                      <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'login' %}">Login</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'register_student'%}">Register</a>
+                      </li>
+                  </ul>
+                {% endif %}
+            </div>
+          </div>
+        </nav>
+        <div class="container my-5">
+            <div class="container py-5 rectangle">
+                <div class="row">
+                    <div class="col-6 mx-auto text-center">
+                        <h2>{{student.firstname}} {{student.middle_name}} {{student.lastname}}</h2>
+                        <h5>{{student.mat_number}}</h5>
+                        <h5>{{student.admission_id}}</h5>
+                        <h5>{{department.department_name}}</h5>
+                        <h5>{{faculty.faculty_name}}</h5>
+                        <br>
+                        <a href="{% url 'courses' faculty.id %}" class="btn btn-warning long">Register Course</a>
+                    </div>
+                    <div class="col-6">
+                        <div class="box-image">
+                            <img class="rounded mx-auto d-block" src="{% static 'images/stud.png'%}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="hrr">
+            <div class="container py-5 rectangle">
+                <div class="courses">
+                    <h3 class="text-center">Registered Courses</h3>
+                    {% for assignment in assignments %}
+                        <div class="ass">
+                            <p><h4>{{assignment.course.course_code}}</h4></p>
+                            <hr>
+                            {% for assignment in assignment.assignments %}
+                                <p class="my-4">{{assignment.name}} || {{assignment.date_added}} to {{assignment.submission_limit}}
+                                    <a href="{% url 'submit_assignment' assignment.id %}" class="btn btn-dark float-end">View</a></p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>
