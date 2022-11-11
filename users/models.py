@@ -7,20 +7,10 @@ from django.contrib.auth.models import User
 class Faculty(models.Model):
     institution_name = models.CharField(max_length=30)
     faculty_name = models.CharField(max_length=30)
-    faculty_id = models.CharField(max_length=15)
     shorts = models.SlugField(max_length=3)
 
     def __str__(self):
         return self.faculty_name
-
-    def save(self, *args, **kwargs):
-        if not self.faculty_id:
-            self.faculty_id = f'{self.shorts}_{self.generate_encrypt()}'
-            return super().save(*args, **kwargs)
-
-    @classmethod
-    def generate_encrypt(cls):
-        return binascii.hexlify(os.urandom(10)).decode()
 
 
 class Department(models.Model):
