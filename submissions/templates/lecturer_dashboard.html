@@ -70,7 +70,13 @@
                     {% else %}
                         <ul class="navbar-nav">
                               <li class="nav-item">
-                                <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+                                <a class="nav-link btn btn-outline-warning mx-2" aria-current="page" href="{% url 'create_course' %}">Create Course</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link btn btn-outline-info mx-2" aria-current="page" href="{% url 'lecturer_assignments' %}">View Assignment</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link btn btn-outline-success mx-2" aria-current="page" href="{% url 'lecture_view_results'%}">View Results</a>
                               </li>
                               <li class="nav-item">
                                 <a class="nav-link btn btn-outline-danger mx-2" aria-current="page" href="{% url 'logout' %}">Logout</a>
@@ -94,10 +100,10 @@
             <div class="container py-5 rectangle">
                 <div class="row">
                     <div class="col-6 mx-auto text-center">
-                        <h2>{{lecturer.staff_name}}</h2>
-                        <h5>{{lecturer.staff_type}}</h5>
-                        <h5>{{department.department_name}}</h5>
-                        <h5>{{faculty.faculty_name}}</h5>
+                        <h2>Staff Name: {{lecturer.staff_name}}</h2>
+                        <h5>Rank: {{lecturer.staff_type}}</h5>
+                        <h5>Faculty: {{faculty.faculty_name}}</h5>
+                        <h5>Department: {{department.department_name}}</h5>
                         <br>
                         <a href="{% url 'create_course' %}" class="btn btn-warning long">Create Course</a>
                     </div>
@@ -115,16 +121,22 @@
             <div class="container py-5 rectangle">
                 <div class="courses">
                     <h3 class="text-center">Courses</h3>
-                    {% for course in courses%}
-                        <div class="ass">
-                            <p><h4>{{course.course.course_code}}</h4></p>
-                            <hr>
-                            {% for assignment in course.assignments %}
-                                <p class="my-4">{{assignment.name}} || {{assignment.date_added}} to {{assignment.submission_limit}}
-                                    <a href="{% url 'course_assignments' assignment.id %}" class="btn btn-dark float-end">View</a></p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Course Code</th>
+                                <th scope="col">Code Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in lecturer_courses%}
+                                <tr>
+                                    <td>{{course.course_code}}</td>
+                                    <td>{{course.course_name}}</td>
+                                </tr>
                             {% endfor %}
-                        </div>
-                    {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

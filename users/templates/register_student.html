@@ -108,43 +108,31 @@
                     <div id="mat_number_help" class="form-text">Your Matriculation Number</div>
                 </div>
                 <div class="mb-3">
-                    <label for="admission_id" class="form-label">admission_id</label>
-                    <input type="text" name="admission_id" class="form-control" id="admission_id" aria-describedby="admission_id_help">
-                    <div id="admission_id_help" class="form-text">Your Admission id number</div>
-                </div>
-                <div class="mb-3">
-                    <label for="nationality" class="form-label">nationality</label>
-                    <input type="text" name="nationality" class="form-control" id="nationality" aria-describedby="nationality_help">
-                    <div id="nationality_help" class="form-text">Your country nationality</div>
-                </div>
-                <div class="mb-3">
-                    <label for="dob" class="form-label">Date of Birth</label>
-                    <input type="date" name="dob" class="form-control" id="dob" aria-describedby="dob_help">
-                    <div id="dob_help" class="form-text">Your official date of birth</div>
-                </div>
-                <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" name="email" class="form-control" id="email" aria-describedby="email_help">
                     <div id="email_help" class="form-text">Your department email</div>
                 </div>
-                <select class="form-select my-2" name="sex" aria-label="Default select example">
-                    <option value="male">male</option>
-                    <option value="female">female</option>
-                </select>
-                <select class="form-select my-2" name="faculty" aria-label="Default select example">
-                  <option selected>Faculty of Department</option>
+                <div class="mb-3">
+                    <label for="level" class="form-label">Level</label>
+                    <input type="number" name="level" class="form-control" id="level" aria-describedby="level_help">
+                    <div id="level_help" class="form-text">Your Level</div>
+                </div>
+                <label for="faculty" class="form-label">Faculty</label>
+                <select class="form-select my-2" id="faculty" name="faculty" aria-label="Default select example">
+                  <option selected>Select Faculty</option>
                   {% for faculty in faculties %}
                     <option value="{{faculty.id}}">{{faculty.faculty_name}}</option>
                   {% endfor %}
                 </select>
-              <select class="form-select my-3" name="department" aria-label="Default select example">
-                  <option selected>Department</option>
+                <label for="department" class="form-label">Department</label>
+                <select class="form-select my-3" id="department" name="department" aria-label="Default select example">
+                  <option selected>Select Department</option>
                   {% for department in departments %}
                     <option value="{{department.id}}">{{department.department_name}}</option>
                   {% endfor %}
                 </select>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">New Password</label>
                     <input type="password" name="password" class="form-control" id="password">
                 </div>
                 <div class="mb-3">

@@ -57,17 +57,23 @@ def create_course(request):
 
 
 def courses(request, faculty_id):
-    faculty = Faculty.objects.get(id=faculty_id)
-    departments = Department.objects.filter(faculty=faculty)
-    faculty_courses = []
-    for department in departments:
-        department_courses = Course.objects.filter(department=department)
-        for course in department_courses:
-            faculty_courses.append(course)
-    context = {
-        'courses': faculty_courses
-    }
-    return render(request, 'courses.html', context=context)
+    if request.user.is_authenticated:
+        faculty = Faculty.objects.get(id=faculty_id)
+        departments = Department.objects.filter(faculty=faculty)
+        faculty_courses = []
+        student = Student.objects.get(user=request.user)
+        for department in departments:
+            department_courses = Course.objects.filter(department=department)
+            for course in department_courses:
+                faculty_courses.append(course)
+        registered_courses = CourseReg.objects.filter(student=student)
+        context = {
+            'courses': faculty_courses,
+            'registered_courses': registered_courses,
+        }
+        return render(request, 'courses.html', context=context)
+    else:
+        return redirect('login')
 
 
 def register_course(request, course_code):
@@ -83,6 +89,16 @@ def register_course(request, course_code):
             student=student,
         )
         course_reg.save()
+        return redirect('courses', faculty_id=student.faculty.id)
+    else:
+        return redirect('login')
+
+
+def unregister_course(request, pk):
+    if request.user.is_authenticated:
+        student = Student.objects.get(user=request.user)
+        course = CourseReg.objects.get(id=pk, student=student)
+        course.delete()
         return redirect('courses', faculty_id=student.faculty.id)
     else:
         return redirect('login')
@@ -116,6 +132,67 @@ def create_assignment(request):
             return render(request, 'create_assignment.html', context=context)
     else:
         return redirect('login')
+
+
+def view_assignment(request):
+    if request.user.is_authenticated:
+        try:
+            student = Student.objects.get(user=request.user)
+        except ObjectDoesNotExist:
+            return redirect('home')
+        registered_courses = CourseReg.objects.filter(student=student)
+        all_ass = []
+        for registered_course in registered_courses:
+            course = registered_course.course
+            ass = Assignment.objects.filter(course=course)
+            assignments = []
+            for assignment in ass:
+                try:
+                    StudentSubmission.objects.get(assignment=assignment)
+                    submitted = True
+                except ObjectDoesNotExist:
+                    submitted = False
+                assignment_dic = {
+                    'assignment': assignment,
+                    'submitted': submitted
+                }
+                assignments.append(assignment_dic)
+            item = {
+                'course': course,
+                'assignments': assignments,
+            }
+            all_ass.append(item)
+        context = {
+            'assignments': all_ass
+        }
+        return render(request, 'view_assignment.html', context=context)
+
+
+def lecturer_assignment(request):
+    if request.user.is_authenticated:
+        try:
+            lecturer = Lecturer.objects.get(staff=request.user)
+        except ObjectDoesNotExist:
+            return redirect('login')
+        lecturer_courses = Course.objects.filter(lecturer=lecturer)
+        all_courses = []
+        for course in lecturer_courses:
+            assignments = Assignment.objects.filter(course=course)
+            item = {
+                'course': course,
+                'assignments': assignments,
+            }
+            all_courses.append(item)
+        context = {
+            'courses': all_courses
+        }
+        return render(request, 'lecturer_assignments.html', context=context)
+    else:
+        return redirect('login')
+
+
+def upload_solution(request):
+    pass
 
 
 def submit_assignment(request, ass_id):
@@ -218,6 +295,7 @@ def lecturer_dashboard(request, pk):
             'lecturer': lecturer,
             'faculty': faculty,
             'department': department,
+            'lecturer_courses': lecturer_courses,
             'courses': all_courses,
         }
         return render(request, 'lecturer_dashboard.html', context=context)
@@ -255,26 +333,108 @@ def student_dashboard(request, pk):
         faculty = student.faculty
         department = student.department
         courses_registered = CourseReg.objects.filter(student=student)
-        results = StudentSubmission.objects.filter(student=student)
-        assignments = []
-        for courses_reg in courses_registered:
-            course = courses_reg.course
-            ass = Assignment.objects.filter(course=course)
-            item = {
-                'course': course,
-                'assignments': ass,
-            }
-            assignments.append(item)
         context = {
             'student': student,
             'faculty': faculty,
             'department': department,
             'courses_registered': courses_registered,
-            'results': results,
-            'assignments': assignments
         }
         return render(request, 'student_dashboard.html', context=context)
 
+    else:
+        return redirect('login')
+
+
+def grade_assignment(request, pk):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            try:
+                lecturer = Lecturer.objects.get(staff=request.user)
+            except ObjectDoesNotExist:
+                return redirect('login')
+            submission = StudentSubmission.objects.get(id=pk)
+            grade = request.POST['grade']
+            submission.grade = grade
+            submission.graded = True
+            submission.save()
+            result = Result.objects.create(
+                assignment=submission.assignment,
+                student_submission=submission,
+                grade=grade,
+            )
+            result.save()
+            assignment = submission.assignment
+            return redirect('course_assignments', ass_id=assignment.id)
+        else:
+            submission = StudentSubmission.objects.get(id=pk)
+            context = {
+                'submission': submission
+            }
+            return render(request, 'grade_assignments.html', context=context)
+    else:
+        return redirect('login')
+
+
+def student_view_result(request):
+    if request.user.is_authenticated:
+        try:
+            student = Student.objects.get(user=request.user)
+        except ObjectDoesNotExist:
+            return redirect('login')
+        submissions = StudentSubmission.objects.filter(student=student, graded=True)
+        context = {
+            'results': submissions
+        }
+        return render(request, 'student_result.html', context=context)
+    else:
+        return redirect('login')
+
+
+def lecturer_view_results(request):
+    if request.user.is_authenticated:
+        try:
+            lecturer = Lecturer.objects.get(staff=request.user)
+        except ObjectDoesNotExist:
+            return redirect('login')
+        lecturer_courses = Course.objects.filter(lecturer=lecturer)
+        all_courses = []
+        for course in lecturer_courses:
+            assignments = Assignment.objects.filter(course=course)
+            item = {
+                'course': course,
+                'assignments': assignments,
+            }
+            all_courses.append(item)
+        context = {
+            'courses': all_courses
+        }
+        return render(request, 'lecturer_view_results.html', context=context)
+    else:
+        return redirect('login')
+
+
+def view_assignment_result(request, pk):
+    if request.user.is_authenticated:
+        try:
+            lecturer = Lecturer.objects.get(staff=request.user)
+        except ObjectDoesNotExist:
+            return redirect('login')
+        assignment = Assignment.objects.get(id=pk)
+        results = Result.objects.filter(assignment=assignment)
+        all_results = []
+        for result in results:
+            submission = StudentSubmission.objects.get(result=result)
+            student = submission.student
+            item = {
+                'result': result,
+                'student': student,
+            }
+            all_results.append(item)
+        context = {
+            'assignment': assignment,
+            'results': all_results
+        }
+        return render(request, 'view_assignment_result.html', context=context)
     else:
         return redirect('login')
 

@@ -1,10 +1,26 @@
-<!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+      <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <style>
+          .text h3 {
+            font-size: 2.5rem;
+            color: white;
+          }
+          .text p {
+            font-size: 1.3rem;
+            color: white;
+          }
+      </style>
   </head>
   <body>
     <div>
@@ -56,9 +72,66 @@
             </div>
           </div>
         </nav>
+        <section class="ftco-section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<h2 class="heading-section mb-5 pb-md-4">Online Assignment Submission System</h2>
+					</div>
+					<div class="col-md-12">
+						<div class="slider-hero">
+							<div class="featured-carousel owl-carousel">
+								<div class="item">
+									<div class="work">
+										<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/uchome5.jpg' %});">
+											<div class="text text-center">
+												<h3>Create Courses and Assignments for students </h3>
+                                                <p>in a timely and organized manner</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="work">
+										<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/uchome2.png' %});">
+											<div class="text text-center">
+												<h3>View and Submit Assignment's in time </h3>
+                                                <p>never lose track of deadlines or assignments</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="work">
+										<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/uchome4.jpg' %});">
+											<div class="text text-center">
+												<h3>Get Graded and View Results as Quickly as Possible</h3>
+                                                <p>This system covers your daily cookies of assignments and student assessments</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
+							<div class="my-5 text-center">
+			          <ul class="thumbnail">
+			            <li class="active img"><a href="#"><img src="{% static 'images/thumb-1.jpg'%}" alt="Image" class="img-fluid"></a></li>
+			            <li><a href="#"><img src="{% static 'images/thumb-2.jpg'%}" alt="Image" class="img-fluid"></a></li>
+			            <li><a href="#"><img src="{% static 'images/thumb-3.jpg'%}" alt="Image" class="img-fluid"></a></li>
+			          </ul>
+			        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
         <footer></footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <script src="{% static 'js/popper.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

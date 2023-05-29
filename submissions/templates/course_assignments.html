@@ -85,7 +85,14 @@
                 <hr class="hrr">
                 {% for submission in student_submissions %}
                     <div class="container">
-                        <p>{{submission.student.mat_number}} | {{submission.date_added}} <a href="{{submission.file.url}}" class="btn btn-outline-dark float-end" download>Download Assignment</a></p>
+                        <p style="display: inline-block;">{{submission.student.mat_number}} | {{submission.date_added}}</p>
+                        <div style="display: inline-block;" class="float-end">
+                            {% if submission.graded %}
+                                <a href="#" class="btn btn-info" disabled>Graded</a>
+                            {% else %}
+                                <a href="{% url 'grade_result' submission.id %}" class="btn btn-outline-info">Grade</a>
+                            {% endif %}
+                            <a href="{{submission.file.url}}" class="btn btn-outline-dark" download>Download Assignment</a></div>
                     </div>
                 {% endfor %}
             </div>

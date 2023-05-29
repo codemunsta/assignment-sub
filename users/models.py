@@ -56,13 +56,10 @@ class Student(models.Model):
     middle_name = models.CharField(max_length=20)
     lastname = models.CharField(max_length=20)
     title = models.CharField(max_length=10)
+    level = models.IntegerField(null=True)
     mat_number = models.CharField(max_length=20)
-    admission_id = models.CharField(max_length=15)
     faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-    nationality = models.CharField(max_length=40)
-    sex = models.CharField(max_length=10, choices=Sex)
-    dob = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.firstname} {self.lastname} | {self.mat_number}'

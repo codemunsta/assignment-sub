@@ -4,3 +4,8 @@ db.sqlite3
 .idea/
 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
 /media
+chromedriver.exe
+static/fonts
+static/images
+static/scss
+staticfiles

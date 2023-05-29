@@ -120,11 +120,8 @@ def register_student(request):
                 middle_name=data['middle_name'],
                 title=data['title'],
                 mat_number=data['mat_number'],
-                admission_id=data['admission_id'],
+                level=data['level'],
                 department=department,
-                nationality=data['nationality'],
-                sex=data['sex'],
-                dob=data['dob'],
                 faculty=faculty,
             )
             student.save()

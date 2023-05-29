@@ -64,6 +64,7 @@ class StudentSubmission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     file = models.FileField()
     grade = models.FloatField(null=True, blank=True)
+    graded = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

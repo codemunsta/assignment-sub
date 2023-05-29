@@ -97,14 +97,16 @@
                     <input type="email" name="email" class="form-control" id="email" aria-describedby="email_help">
                     <div id="email_help" class="form-text">Your department email</div>
                 </div>
-              <select class="form-select my-3" name="department" aria-label="Default select example">
-                  <option selected>Department</option>
+                <label for="department" class="form-label">Department</label>
+              <select class="form-select my-3" id="department" name="department" aria-label="Default select example">
+                  <option selected>Select Department</option>
                   {% for department in departments %}
                     <option value="{{department.id}}">{{department.department_name}}</option>
                   {% endfor %}
                 </select>
-                <select class="form-select my-3" name="staff_type" aria-label="Default select example">
-                  <option selected>Staff Type</option>
+                <label for="staff_level" class="form-label">Staff Level</label>
+                <select class="form-select my-3" id="staff_level" name="staff_type" aria-label="Default select example">
+                  <option selected>select</option>
                     <option value="Senior_Professor">Senior_Professor</option>
                     <option value="Professor">Professor</option>
                     <option value="Lecturer_1">Lecturer_1</option>
